@@ -9,12 +9,14 @@ import ActivityDetailedInfo from "./ActivityDetailedInfo";
 import ActivityDetailedChat from "./ActivityDetailedChat";
 import ActivityDetailedSidbar from "./ActivityDetailedSidebar";
 
-export default observer(function ActivityDetails() {
-    const {activityStore} = useStore();
-    const {selectedActivity: activity, loadActivity, loadingInitial} = activityStore;
-    const {id} = useParams();
+export default observer(function ActivityDetails()
+{
+    const { activityStore } = useStore();
+    const { selectedActivity: activity, loadActivity, loadingInitial } = activityStore;
+    const { id } = useParams();
 
-    useEffect(() => {
+    useEffect(() =>
+    {
         if (id) loadActivity(id);
     }, [id, loadActivity])
 
@@ -23,11 +25,11 @@ export default observer(function ActivityDetails() {
     return (
         <Grid>
             <Grid.Column width={10}>
-                <ActivityDetailedHeader activity = {activity}/>
-                <ActivityDetailedInfo activity = {activity} />
+                <ActivityDetailedHeader activity={activity} />
+                <ActivityDetailedInfo activity={activity} />
                 <ActivityDetailedChat />
             </Grid.Column>
-            <Grid.Column width = {6}>
+            <Grid.Column width={6}>
                 <ActivityDetailedSidbar />
             </Grid.Column>
         </Grid>
