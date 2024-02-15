@@ -3,6 +3,7 @@ import { Activity } from "../models/activity";
 import { toast } from "react-toastify";
 import { router } from "../router/Routes";
 import { store } from "../stores/store";
+import { User, UserFormValue } from "../models/user";
 
 const sleep = (delay: number) =>
 {
@@ -13,6 +14,12 @@ const sleep = (delay: number) =>
 }
 
 axios.defaults.baseURL = "http://localhost:5000/api";
+
+axios.interceptors.request.use(config => {
+    const token = store.commonStore.token;
+    if (token && config.headers) config.headers.Authorization = `Bearer ${token}`;
+    return config;
+})
 
 axios.interceptors.response.use(async response =>
 {
@@ -29,7 +36,8 @@ axios.interceptors.response.use(async response =>
                 const modalStateErrors = [];
                 for (const key in data.errors) {
                     if (data.errors[key]) {
-                        modalStateErrors.push(data.errors[key])
+                        modalStateErrors.push(data.errors[key]);
+                        console.log(modalStateErrors);
                     }
                 }
                 throw modalStateErrors.flat();
@@ -71,8 +79,15 @@ const Activities = {
     delete: (id: string) => axios.delete<void>(`/activities/${id}`),
 }
 
+const Account = {
+    current: () => requests.get<User>('/account'),
+    login: (user: UserFormValue) => requests.post<User>('/account/login', user),
+    register: (user: UserFormValue) => requests.post<User>('/account/register', user)
+}
+
 const agent = {
-    Activities
+    Activities,
+    Account
 }
 
 export default agent;
